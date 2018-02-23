@@ -1,0 +1,19 @@
+button {
+    font-size: 15px;
+    /* padding: 20px 30px; */
+    width: 80px;
+    height: 80px;
+}
+
+input {
+    height: 40px;
+    width: 300px;
+}
+
+.output {
+    font-weight: 300;
+    font-size: 46px;
+    /* text-align: center; */
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
