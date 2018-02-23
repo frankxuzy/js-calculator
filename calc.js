@@ -20,6 +20,8 @@ var getTextBox = document.getElementById("input");
 var getButton = document.getElementsByTagName("button");
 var getZero = document.getElementById("zero");
 var getEqual = document.getElementById("equal");
+var getExpression = document.getElementsByClassName("outputExpression");
+var getResult = document.getElementsByClassName("outputResult");
 
 Array.from(getNum).forEach(function(val){
     val.addEventListener("click", printNum.bind(this, val));
@@ -36,6 +38,9 @@ function printNum(button) {
     printExpression += button.innerText;
     lastChar = printExpression[printExpression.length - 1];
     console.log(printExpression, lastChar);
+    getExpression[0].textContent = printExpression;
+
+
 }
 
 // handle operator
@@ -53,6 +58,7 @@ function printOperator(button) {
         }
 
         console.log(printExpression, lastChar);
+        getExpression[0].textContent = printExpression;
     }
     // if(lastChar === /&divide;/g){
     //     console.log("find it")
@@ -93,6 +99,7 @@ function calculate(expression) {
             }
         }
         console.log(arr[0]);
+        getResult[0].textContent = arr[0];
     }
 
     calcResults(expArr);

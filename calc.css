@@ -10,10 +10,23 @@ input {
     width: 300px;
 }
 
-.output {
+.outputExpression {
     font-weight: 300;
     font-size: 46px;
-    /* text-align: center; */
+    text-align: right;
     margin-bottom: 25px;
     letter-spacing: 2px;
 }
+
+.outputResult {
+    font-weight: 300;
+    font-size: 46px;
+    text-align: right;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
+.canvas {
+    max-width: 500px;
+    top: 0px;
+    margin: 0 auto;
+    } 

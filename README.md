@@ -21,5 +21,5 @@
 - Add ```highPriorityOperatorIndex``` to check the index of first ```*``` or ```/``` if have.
 
 ### 23 Feb
-- Add ```calcResults``` to handle the expressio array and print result.
+- Add ```calcResults``` to handle the expression array and print result.
 - github check in.
