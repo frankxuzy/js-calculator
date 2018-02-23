@@ -29,7 +29,7 @@ Array.from(getOperator).forEach(function(val){
     val.addEventListener("click", printOperator.bind(this, val));
 });
 
-getEqual.addEventListener("click", calcResults.bind(this, getEqual));
+getEqual.addEventListener("click", printResults.bind(this, getEqual));
 
 // handle numbers
 function printNum(button) {
@@ -60,7 +60,7 @@ function printOperator(button) {
 }
 
 // handle calc results
-function calcResults(equalButton) {
+function printResults(equalButton) {
     if(lastChar != "" && /[0-9]/.test(lastChar)){
         calculate(printExpression);
     }
@@ -114,15 +114,16 @@ function highPriorityOperatorIndex(arr, opera1, opera2){
     }
 }
 
-var stripeArr = function(val) {
-    if(!Array.isArray(val)){
-      newArr.push(val);
-    } else{
-      for(var i in val){
-        stripeArr(val[i]);
-      }
-    }   
-  };
+// recursion demo
+// var stripeArr = function(val) {
+//     if(!Array.isArray(val)){
+//       newArr.push(val);
+//     } else{
+//       for(var i in val){
+//         stripeArr(val[i]);
+//       }
+//     }   
+//   };
 
 // Array.from(getButton).forEach(clickButton);
 
