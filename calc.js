@@ -84,10 +84,11 @@ function printResults(equalButton) {
 
 // handle calcs
 function calculate(expression) {
-    // (?<=...) means look-behind assertion, and (?=...) means look-ahead assertion.
-    // var expArr = expression.split("+");
-    // var expArr = expression.split("/(?<=[-+*\/])|(?=[-+*\/])/g");
-    var expArr = expression.replace(/([0-9])([-+*\/])([0-9])/g, '$1 $2 $3').split(' ');
+// bug found if use below regex 1+1*1*1*1*1 will become [1, +, 1*1, *, 1*1, *, 1]
+//  var expArr = expression.replace(/([0-9])([-+/*\/])([0-9])/g, '$1 $2 $3').split(' ');
+// one solution is scan twice first seperate 1* to 1 * then seperate *1 to * 1.
+    var expArr = expression.replace(/([0-9])([-+/*\/])/g, '$1 $2');
+    expArr = expArr.replace(/([-+/*\/])([0-9])/g, '$1 $2').split(' ');
     console.log(expArr);
 
     // find the index of high priority operator then calc with index-1 and index+1 then splice into the array
@@ -109,7 +110,12 @@ function calculate(expression) {
             }
         }
         console.log(arr[0]);
-        getResult[0].textContent = '= ' + arr[0];
+        //Print result into outputResult div
+        getResult[0].textContent =  arr[0];
+        //Print expression into outputExpression div
+        getExpression[0].textContent = expressionStr + '=' + arr[0];
+        //refresh the expressionStr value to current result.
+        expressionStr = arr[0]
     }
 
     calcResults(expArr);

@@ -31,4 +31,4 @@ check list:
 ### 24 Feb
 - Print the expression and result on page by click buttons.
 - Add function to handle AC button.
-- 
+- Fix bug when convert expression string to array.
