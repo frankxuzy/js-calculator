@@ -4,7 +4,7 @@ console.log("started!")
 // });
 
 // document.getElementById("ac").addEventListener("click", dosomething);
-var printExpression = ""; 
+var expressionStr = ""; 
 var lastChar = "";
 // var getSeven = document.getElementById("seven");
 var getNum = document.getElementsByClassName("num");
@@ -22,6 +22,7 @@ var getZero = document.getElementById("zero");
 var getEqual = document.getElementById("equal");
 var getExpression = document.getElementsByClassName("outputExpression");
 var getResult = document.getElementsByClassName("outputResult");
+var getAC = document.getElementById("ac");
 
 Array.from(getNum).forEach(function(val){
     val.addEventListener("click", printNum.bind(this, val));
@@ -32,13 +33,22 @@ Array.from(getOperator).forEach(function(val){
 });
 
 getEqual.addEventListener("click", printResults.bind(this, getEqual));
+getAC.addEventListener("click", handleAC.bind(this, getAC));
+
+// handle AC
+function handleAC() {
+    getExpression[0].textContent = "";
+    getResult[0].textContent = "";
+    expressionStr = ""; 
+    lastChar = "";
+} 
 
 // handle numbers
 function printNum(button) {
-    printExpression += button.innerText;
-    lastChar = printExpression[printExpression.length - 1];
-    console.log(printExpression, lastChar);
-    getExpression[0].textContent = printExpression;
+    expressionStr += button.innerText;
+    lastChar = expressionStr[expressionStr.length - 1];
+    console.log(expressionStr, lastChar);
+    getExpression[0].textContent = expressionStr;
 
 
 }
@@ -47,18 +57,18 @@ function printNum(button) {
 function printOperator(button) {
     if(lastChar != ""&& /[0-9]/g.test(lastChar)){
         if(button.id === "div"){
-            printExpression += "/";
-            lastChar = printExpression[printExpression.length - 1];
+            expressionStr += "/";
+            lastChar = expressionStr[expressionStr.length - 1];
         } else if(button.id === "multi"){
-            printExpression += "*";
-            lastChar = printExpression[printExpression.length - 1];
+            expressionStr += "*";
+            lastChar = expressionStr[expressionStr.length - 1];
         } else {
-            printExpression += button.innerHTML;
-            lastChar = printExpression[printExpression.length - 1];
+            expressionStr += button.innerHTML;
+            lastChar = expressionStr[expressionStr.length - 1];
         }
 
-        console.log(printExpression, lastChar);
-        getExpression[0].textContent = printExpression;
+        console.log(expressionStr, lastChar);
+        getExpression[0].textContent = expressionStr;
     }
     // if(lastChar === /&divide;/g){
     //     console.log("find it")
@@ -68,7 +78,7 @@ function printOperator(button) {
 // handle calc results
 function printResults(equalButton) {
     if(lastChar != "" && /[0-9]/.test(lastChar)){
-        calculate(printExpression);
+        calculate(expressionStr);
     }
 }
 
@@ -99,7 +109,7 @@ function calculate(expression) {
             }
         }
         console.log(arr[0]);
-        getResult[0].textContent = arr[0];
+        getResult[0].textContent = '= ' + arr[0];
     }
 
     calcResults(expArr);

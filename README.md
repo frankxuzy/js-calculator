@@ -1,5 +1,10 @@
 # js-calculator
 
+check list:
+- handle 0
+- handle .
+- protect all parameters
+
 ### 20 Feb
 - Build html page.
 
@@ -22,4 +27,8 @@
 
 ### 23 Feb
 - Add ```calcResults``` to handle the expression array and print result.
-- github check in.
+
+### 24 Feb
+- Print the expression and result on page by click buttons.
+- Add function to handle AC button.
+- 
