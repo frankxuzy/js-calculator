@@ -1,19 +1,11 @@
 console.log("started!")
-// document.addEventListener("DOMContentLoaded", function(event) {
-    
-// });
-// function init() {
-//     console.log("DOM fully loaded and parsed");
 
-//     console.log("Buttons in itialzw");
-// }
-
-// document.getElementById("ac").addEventListener("click", dosomething);
 var expressionStr = ""; 
 var lastChar = "";
+var expressionArrItem = "";
+var expressionArr = [];
 // check if calculate or not
-var isResult = false;
-// var getSeven = document.getElementById("seven");
+var isCalc = false;
 var getNum = document.getElementsByClassName("num");
 var getOperator = document.getElementsByClassName("operator");
 var getTextBox = document.getElementById("input");
@@ -24,129 +16,166 @@ var getExpression = document.getElementsByClassName("outputExpression");
 var getResult = document.getElementsByClassName("outputResult");
 var getAC = document.getElementById("ac");
 
+// Num event listener
 // from function covert array-like obj to array.
 Array.from(getNum).forEach(function(val){
     val.addEventListener("click", printNum.bind(this, val));
 });
 
+// Operator event listener
 Array.from(getOperator).forEach(function(val){
     val.addEventListener("click", printOperator.bind(this, val));
 });
 
+// equal button event listener
 getEqual.addEventListener("click", printResults.bind(this, getEqual));
+
+// AC button event listener
 getAC.addEventListener("click", handleAC.bind(this, getAC));
 
 // handle AC
 function handleAC() {
-    getExpression[0].textContent = "";
+    getExpression[0].textContent = "0";
     getResult[0].textContent = "";
     expressionStr = ""; 
     lastChar = "";
+    expressionArr = [];
+    expressionArrItem = "";
 } 
 
 // handle numbers
 function printNum(button) {
-    if(!isResult){
+    if(!isCalc){
+        //check is "."
         if(button.innerText == "."){
-            isDot(expressionStr);
-            return;
+            isDot();
+        } else if(button.innerText == "0"){
+            isZero();
+        } else {
+            expressionArrItem += button.innerText;
+            expressionStr += button.innerText;
+            lastChar = expressionArrItem[expressionArrItem.length - 1];
         }
-        expressionStr += button.innerText;
-        lastChar = expressionStr[expressionStr.length - 1];
-        console.log(expressionStr, lastChar);
-        getExpression[0].textContent = expressionStr;
-    } else {
-        isResult = false;
+        expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
+        console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+        } 
+    else {
+        isCalc = false;
+        getResult[0].textContent = "";        
+        expressionArr = [];
         if(button.innerText == "."){
-            isDot(expressionStr);
-            return;
+            isDot(expressionArrItem);
+        } else if(button.innerText == "0") {
+            isZero(expressionArrItem);
+        }else {
+            expressionArrItem += button.innerText;
+            lastChar = expressionStr[expressionStr.length - 1];
         }
-        expressionStr = "";
-        expressionStr += button.innerText;
-        lastChar = expressionStr[expressionStr.length - 1];
-        console.log(expressionStr, lastChar);
-        getExpression[0].textContent = expressionStr;
+        console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+        expressionStr += expressionArrItem;
+        expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
+        
     }
 }
 
-// handle dot button input expressionStr
-function isDot(expStr){
-    if(expStr === ""){
-        expressionStr = "0.";
-    } else if(expStr.indexOf(".") === -1) {
-        expressionStr += ".";
+function isZero() {
+        //there is dot or there are 1-9 before
+        if(expressionArrItem.lastIndexOf(".") !== -1 || /[1-9]/g.test(expressionArrItem)){
+            expressionArrItem += 0;
+            expressionStr += 0;
+            lastChar = expressionArrItem[expressionArrItem.length - 1]; 
+        }
     }
-    getExpression[0].textContent = expressionStr;    
+
+function isDot(){
+    if(expressionArrItem === ""){
+        expressionArrItem += "0.";
+        expressionStr += "0."
+    } else if(expressionArrItem.indexOf(".") === -1) {
+        expressionArrItem += ".";
+        expressionStr += "."
+    }
+    lastChar = expressionArrItem[expressionArrItem.length - 1];
 }
+
 // handle operator
 function printOperator(button) {
     if(lastChar != ""&& /[0-9]/g.test(lastChar)){
+        if(!isCalc){
+            expressionArr.push(expressionArrItem);
+        }  
         if(button.id === "div"){
-            expressionStr += "/";
-            lastChar = expressionStr[expressionStr.length - 1];
+            expressionArr.push("/");
+            lastChar = "/";
+            expressionStr += String.fromCharCode(247);
+            getExpression[0].textContent = expressionStr; 
         } else if(button.id === "multi"){
-            expressionStr += "*";
-            lastChar = expressionStr[expressionStr.length - 1];
+            expressionArr.push("*");
+            lastChar = "*";
+            expressionStr += String.fromCharCode(215); 
+            getExpression[0].textContent = expressionStr;
         } else {
+            expressionArr.push(button.innerHTML);
+            lastChar = button.innerHTML;
             expressionStr += button.innerHTML;
-            lastChar = expressionStr[expressionStr.length - 1];
+            getExpression[0].textContent = expressionStr;
         }
-        isResult = false;
-        console.log(expressionStr, lastChar);
-        getExpression[0].textContent = expressionStr;
+        isCalc = false;
+        expressionArrItem = ""
+        console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
     }
 }
 
 // handle calc results
 function printResults(equalButton) {
     if(lastChar != "" && /[0-9]/.test(lastChar)){
-        calculate(expressionStr);
+        expressionArr.push(expressionArrItem);
+        expressionArrItem = ""
+        calcResults(expressionArr);
     }
 }
 
 // handle calcs
-function calculate(expression) {
 // bug found if use below regex 1+1*1*1*1*1 will become [1, +, 1*1, *, 1*1, *, 1]
 //  var expArr = expression.replace(/([0-9])([-+/*\/])([0-9])/g, '$1 $2 $3').split(' ');
 // one solution is scan twice first seperate 1* to 1 * then seperate *1 to * 1.
-    var expArr = expression.replace(/([0-9])([-+/*\/])/g, '$1 $2');
-    expArr = expArr.replace(/([-+/*\/])([0-9])/g, '$1 $2').split(' ');
-    console.log(expArr);
+    // var expArr = expression.replace(/([0-9])([-+/*\/])/g, '$1 $2');
+    // expArr = expArr.replace(/([-+/*\/])([0-9])/g, '$1 $2').split(' ');
+    // console.log(expArr);
 
     // find the index of high priority operator then calc with index-1 and index+1 then splice into the array
-    var calcResults = function(arr) {
-        while(arr.length > 2) {
-            var operatorIdx = highPriorityOperatorIndex(arr, "*", "/");
-            var subExpression =[];
-            var subExpressionResults;
-            if(operatorIdx !== -1){
-                // array.slice selected from begin to end (end not included).
-                subExpression = arr.splice(operatorIdx - 1, operatorIdx + 2).join("");
-                subExpressionResults = eval(subExpression);
-                arr.splice(operatorIdx - 1, 0, subExpressionResults);
-                console.log(arr);
-            } else {
-                subExpression = arr.splice(0, 3).join("");
-                subExpressionResults = eval(subExpression);
-                arr.splice(0, 0, subExpressionResults);
-            }
-        }
-        console.log(arr[0]);
-        //Print result into outputResult div
-        getResult[0].textContent =  arr[0];
-        //Print expression into outputExpression div
-        getExpression[0].textContent = expressionStr + '=' + arr[0];
-        //refresh the expressionStr value to current result.
-        expressionStr = arr[0]
-        isResult = true;
-    }
 
-    calcResults(expArr);
     // expArr.indexOf("/*|\//g")
 
-
+function calcResults(arr) {
+    while(arr.length > 2) {
+        var operatorIdx = highPriorityOperatorIndex(arr, "*", "/");
+        var subExpression =[];
+        var subExpressionResults;
+        if(operatorIdx !== -1){
+            // array.slice selected from begin to end (end not included).
+            subExpression = arr.splice(operatorIdx - 1, operatorIdx + 2).join("");
+            subExpressionResults = eval(subExpression);
+            arr.splice(operatorIdx - 1, 0, subExpressionResults);
+            console.log(arr);
+        } else {
+            subExpression = arr.splice(0, 3).join("");
+            subExpressionResults = eval(subExpression);
+            arr.splice(0, 0, subExpressionResults);
+        }
+    }
+    console.log(arr[0]);
+    //Print result into outputResult div
+    getResult[0].textContent = arr[0];
+    //Print expression into outputExpression div
+    getExpression[0].textContent = expressionStr + '=' + arr[0];
+    //refresh the expressionStr value to current result.
+    expressionStr = arr[0];    
+    expressionArr = [];
+    expressionArr.push(arr[0]);
+    expressionArrItem = "";
+    isCalc = true;
 }
-
 // find the operator with high priority 
 function highPriorityOperatorIndex(arr, opera1, opera2){
     if(arr.indexOf(opera1) !== -1 && arr.indexOf(opera2) !== -1){
@@ -195,9 +224,9 @@ function highPriorityOperatorIndex(arr, opera1, opera2){
 // });
 // getOperator.addEventListener("click", printHello);
 
-function printHello() {
-    console.log("hello");
-}
+// function printHello() {
+//     console.log("hello");
+// }
 
 
 
@@ -212,4 +241,3 @@ function printHello() {
 // if(lastChar == "." || /[0-9]/){
         
 // }
-

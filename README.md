@@ -40,17 +40,18 @@ feature waiting list:
 ### 25 Feb
 New IDEA 
     expressionStr = "";
-    lastWord = expressionStr[expressionStr.length - 1];
+    lastChar = expressionStr[expressionStr.length - 1];
     expressionArr = [];
 - When click Num:
     check if it's dot. 
     expressionStr += num;
-    lastWord = expressionStr[expressionStr.length - 1];
+    lastChar = expressionStr[expressionStr.length - 1];
 
 - When click operator:
-    check if lastWord match operator 
+    check if lastChar match operator 
         if not, push str into expressionArr. 
                 push operator into expressionArr.
                 empty expressionStr.
-                lastWord = operator
+                lastChar = operator
 
+It works! But code is ugly! need refactor. 
