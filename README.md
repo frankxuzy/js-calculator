@@ -1,8 +1,6 @@
 # js-calculator
 
 feature waiting list:
-- handle 0
-- handle .
 - handle CE
 - protect all parameters
 - add keyboard num input
@@ -55,3 +53,6 @@ New IDEA
                 lastChar = operator
 
 It works! But code is ugly! need refactor. 
+
+### 26 Feb
+- Add CE function

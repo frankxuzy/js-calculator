@@ -15,6 +15,7 @@ var getEqual = document.getElementById("equal");
 var getExpression = document.getElementsByClassName("outputExpression");
 var getResult = document.getElementsByClassName("outputResult");
 var getAC = document.getElementById("ac");
+var getCE = document.getElementById("ce");
 
 // Num event listener
 // from function covert array-like obj to array.
@@ -33,6 +34,10 @@ getEqual.addEventListener("click", printResults.bind(this, getEqual));
 // AC button event listener
 getAC.addEventListener("click", handleAC.bind(this, getAC));
 
+// CE button event listener
+getCE.addEventListener("click", handleCE.bind(this, getCE));
+
+
 // handle AC
 function handleAC() {
     getExpression[0].textContent = "0";
@@ -42,6 +47,16 @@ function handleAC() {
     expressionArr = [];
     expressionArrItem = "";
 } 
+
+// handle CE
+function handleCE() {
+    if(/[0-9.]/g.test(lastChar)){
+        expressionStr = expressionStr.substring(0, expressionStr.lastIndexOf(expressionArrItem));
+        expressionArrItem = "";
+        lastChar = expressionArrItem[expressionArrItem.length - 1];
+        expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
+    }
+}
 
 // handle numbers
 function printNum(button) {
