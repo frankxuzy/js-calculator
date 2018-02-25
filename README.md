@@ -55,3 +55,5 @@ It works! But code is ugly! need refactor.
 
 ### 26 Feb
 - Add CE function
+- Add keyboard num and operators input function
+- Add minus button in html

@@ -10,6 +10,9 @@ button {
     height: 80px;
 }
 
+#equal{
+    width: 164px;
+}
 input {
     height: 40px;
     width: 300px;
