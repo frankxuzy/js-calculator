@@ -37,7 +37,43 @@ getAC.addEventListener("click", handleAC.bind(this, getAC));
 // CE button event listener
 getCE.addEventListener("click", handleCE.bind(this, getCE));
 
+// num key press event listener
+// Array.from(getNum).forEach(function(val){
+//     val.addEventListener("keypress", printKey.bind(this, val));
+// });
+document.addEventListener("keypress", function(event){
+    if(/46|4[8-9]|5[0-7]/g.test(event.keyCode)){
+        console.log(event.keyCode);
+        Array.from(getNum).forEach(function(val){
+            if(val.innerText === String.fromCharCode(event.keyCode)){
+                printNum(val);
+            }
+        });
+    } else if(/42|43|45|47/g.test(event.keyCode)) {
+        Array.from(getOperator).forEach(function(val){
+            if(val.innerText === String.fromCharCode(event.keyCode)){
+                printOperator(val);
+            } else if(event.keyCode == 42) {
+                printOperator(document.getElementById("multi"));
+            } else if(event.keyCode == 47) {
+                printOperator(document.getElementById("div"));
+            }
+        });
+    } else if(event.keyCode == 13 || event.keyCode == 61) {
+        printResults(getEqual);
+    }
+});
+// function printKey(val){
 
+// }
+
+// function printNumByKey(key) {
+
+
+//     Array.from(getNum).forEach(function(val){
+//         val.innerText == 
+//     });
+// }
 // handle AC
 function handleAC() {
     getExpression[0].textContent = "0";

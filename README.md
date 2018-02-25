@@ -1,7 +1,6 @@
 # js-calculator
 
 feature waiting list:
-- handle CE
 - protect all parameters
 - add keyboard num input
 - add negtive num calc
