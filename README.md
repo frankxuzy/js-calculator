@@ -1,7 +1,7 @@
 # js-calculator
 
-feature waiting list:
-- protect all parameters
+Todo list:
+- code refactor
 - bug unsolved decimal calculations 0.2 + 0.1 = 0.30000000000000004
 
 

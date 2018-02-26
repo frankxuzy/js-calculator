@@ -272,7 +272,7 @@ function calcResults(arr) {
         var subExpressionResults;
         if(operatorIdx !== -1){
             // array.slice selected from begin to end (end not included).
-            subExpression = arr.splice(operatorIdx - 1, 3).join("");
+            subExpression = arr.splice(operatorIdx - 1, operatorIdx + 2).join("");
             subExpressionResults = eval(subExpression);
             arr.splice(operatorIdx - 1, 0, subExpressionResults);
             console.log(arr);
