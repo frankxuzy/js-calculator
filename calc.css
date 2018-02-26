@@ -8,6 +8,7 @@ button {
     /* padding: 20px 30px; */
     width: 80px;
     height: 80px;
+    border-radius: 50%;
 }
 
 
@@ -48,5 +49,6 @@ hr {
 }
 
 #equal{
+    border-radius: 40px;
     width: 164px;
 }

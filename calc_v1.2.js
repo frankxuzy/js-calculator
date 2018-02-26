@@ -8,15 +8,13 @@ var expressionArr = [];
 var isCalc = false;
 var getNum = document.getElementsByClassName("num");
 var getOperator = document.getElementsByClassName("operator");
-var getTextBox = document.getElementById("input");
-var getButton = document.getElementsByTagName("button");
-var getZero = document.getElementById("zero");
 var getEqual = document.getElementById("equal");
 var getExpression = document.getElementsByClassName("outputExpression");
 var getResult = document.getElementsByClassName("outputResult");
 var getAC = document.getElementById("ac");
 var getCE = document.getElementById("ce");
 var getNegative = document.getElementById("negative");
+
 
 // Num event listener
 // from function covert array-like obj to array.
@@ -272,7 +270,7 @@ function calcResults(arr) {
         var subExpressionResults;
         if(operatorIdx !== -1){
             // array.slice selected from begin to end (end not included).
-            subExpression = arr.splice(operatorIdx - 1, operatorIdx + 2).join("");
+            subExpression = arr.splice(operatorIdx - 1, 3).join("");
             subExpressionResults = eval(subExpression);
             arr.splice(operatorIdx - 1, 0, subExpressionResults);
             console.log(arr);
