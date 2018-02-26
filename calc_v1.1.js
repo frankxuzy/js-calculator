@@ -16,6 +16,7 @@ var getExpression = document.getElementsByClassName("outputExpression");
 var getResult = document.getElementsByClassName("outputResult");
 var getAC = document.getElementById("ac");
 var getCE = document.getElementById("ce");
+var getNegative = document.getElementById("negative");
 
 // Num event listener
 // from function covert array-like obj to array.
@@ -36,6 +37,9 @@ getAC.addEventListener("click", handleAC.bind(this, getAC));
 
 // CE button event listener
 getCE.addEventListener("click", handleCE.bind(this, getCE));
+
+// minus button event listener
+getNegative.addEventListener("click", handleNegative.bind(this, getNegative));
 
 // num key press event listener
 // Array.from(getNum).forEach(function(val){
@@ -63,17 +67,47 @@ document.addEventListener("keypress", function(event){
         printResults(getEqual);
     }
 });
-// function printKey(val){
 
-// }
+function handleNegative(){
+    if(!isCalc){
+        if(/[0-9]/g.test(lastChar) && expressionArrItem.indexOf("-") !== 0){
+            expressionStr = expressionStr.substring(0, expressionStr.lastIndexOf(expressionArrItem));
+            expressionStr += ("(-" + expressionArrItem + ")");
+            expressionArrItem = "-" + expressionArrItem;
+            lastChar = expressionArrItem[expressionArrItem.length - 1];
+            console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+            getExpression[0].textContent = expressionStr;        
+        } else if(expressionArrItem.indexOf("-") === 0){
+            expressionStr = expressionStr.substring(0, (expressionStr.lastIndexOf(expressionArrItem) - 1));
+            expressionArrItem = expressionArrItem.substring(1);
+            lastChar = expressionArrItem[expressionArrItem.length - 1];        
+            console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+            expressionStr += expressionArrItem;
+            getExpression[0].textContent = expressionStr;   
+        }
+    } else {
+        if(/[0-9]/g.test(lastChar) && expressionArr[expressionArr.length - 1].toString().indexOf("-") !== 0){
+            expressionStr = ("(-" + expressionArr[expressionArr.length - 1]+ ")");
+            expressionArrItem = "-" + expressionArr[expressionArr.length - 1];
+            lastChar = expressionArrItem[expressionArrItem.length - 1];        
+            expressionArr = [];
+            expressionArr.push(expressionArrItem);
+            getExpression[0].textContent = expressionStr;    
+            console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+            
+        } else if(expressionArr[expressionArr.length - 1].toString().indexOf("-") === 0){
+            expressionArrItem = expressionArr[expressionArr.length - 1].substring(1);
+            lastChar = expressionArrItem[expressionArrItem.length - 1];        
+            expressionArr = [];
+            expressionArr.push(expressionArrItem);
+            expressionStr = ("(-" + expressionArrItem + ")");
+            getExpression[0].textContent = expressionStr;
+            console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+        }
+    }
 
-// function printNumByKey(key) {
+}
 
-
-//     Array.from(getNum).forEach(function(val){
-//         val.innerText == 
-//     });
-// }
 // handle AC
 function handleAC() {
     getExpression[0].textContent = "0";
@@ -119,11 +153,11 @@ function printNum(button) {
         } else if(button.innerText == "0") {
             isZero(expressionArrItem);
         }else {
-            expressionArrItem += button.innerText;
-            lastChar = expressionStr[expressionStr.length - 1];
+            expressionArrItem = button.innerText;
+            lastChar = expressionArrItem[expressionArrItem.length - 1];
         }
         console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
-        expressionStr += expressionArrItem;
+        expressionStr = expressionArrItem;
         expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
         
     }
@@ -227,6 +261,7 @@ function calcResults(arr) {
     expressionArrItem = "";
     isCalc = true;
 }
+
 // find the operator with high priority 
 function highPriorityOperatorIndex(arr, opera1, opera2){
     if(arr.indexOf(opera1) !== -1 && arr.indexOf(opera2) !== -1){

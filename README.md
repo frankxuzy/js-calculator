@@ -36,6 +36,7 @@ feature waiting list:
 
 ### 25 Feb
 New IDEA 
+```
     expressionStr = "";
     lastChar = expressionStr[expressionStr.length - 1];
     expressionArr = [];
@@ -50,10 +51,11 @@ New IDEA
                 push operator into expressionArr.
                 empty expressionStr.
                 lastChar = operator
-
+```
 It works! But code is ugly! need refactor. 
 
 ### 26 Feb
 - Add CE function
 - Add keyboard num and operators input function
 - Add minus button in html
+- Add negative calc function 
