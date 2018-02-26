@@ -64,7 +64,10 @@ It works! But code is ugly! need refactor.
 - fix a bug when handle CE 
 
 ### 27 Feb 
-- refactor printNum function
+- refactor printNum function.
+- refactor printOperator function.
+- Add checkCurrentData function.
+
 
 Code refactor.
 Review all features.

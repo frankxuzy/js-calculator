@@ -17,36 +17,38 @@ var getCE = document.getElementById("ce");
 var getNegative = document.getElementById("negative");
 
 function calc_init() {
-// Num event listener
-// from function covert array-like obj to array.
-Array.from(getNum).forEach(function(val){
-    val.addEventListener("click", printNum.bind(this, val));
-});
+    // Num event listener
+    // from function covert array-like obj to array.
+    Array.from(getNum).forEach(function(val){
+        val.addEventListener("click", printNum.bind(this, val));
+    });
 
-// Operator event listener
-Array.from(getOperator).forEach(function(val){
-    val.addEventListener("click", printOperator.bind(this, val));
-});
+    // Operator event listener
+    Array.from(getOperator).forEach(function(val){
+        val.addEventListener("click", printOperator.bind(this, val));
+    });
 
-// equal button event listener
-getEqual.addEventListener("click", printResults.bind(this, getEqual));
+    // equal button event listener
+    getEqual.addEventListener("click", printResults.bind(this, getEqual));
 
-// AC button event listener
-getAC.addEventListener("click", handleAC.bind(this, getAC));
+    // AC button event listener
+    getAC.addEventListener("click", handleAC.bind(this, getAC));
 
-// CE button event listener
-getCE.addEventListener("click", handleCE.bind(this, getCE));
+    // CE button event listener
+    getCE.addEventListener("click", handleCE.bind(this, getCE));
 
-// minus button event listener
-getNegative.addEventListener("click", handleNegative.bind(this, getNegative));
+    // minus button event listener
+    getNegative.addEventListener("click", handleNegative.bind(this, getNegative));
 
-keypressEventListener()
+    keypressEventListener()
 }
 
 //key press event listener
 function checkCurrentData() {
+    console.log("expressionStr", "expressionArrItem", "lastChar", "expressionArr", "isCalc");    
     console.log(expressionStr, expressionArrItem, lastChar, expressionArr, isCalc);    
 }
+
 function keypressEventListener(){
     document.addEventListener("keypress", function(event){
         console.log(event.keyCode);
@@ -145,39 +147,6 @@ function handleCE() {
 }
 
 // handle numbers
-// function printNum(button) {
-//     if(!isCalc){
-//         //check is "."
-//         if(button.innerText == "."){
-//             printDot();
-//         } else if(button.innerText == "0"){
-//             printZero();
-//         } else {
-//             expressionArrItem += button.innerText;
-//             expressionStr += button.innerText;
-//             lastChar = expressionArrItem[expressionArrItem.length - 1];
-//         }
-//         checkCurrentData()        
-//         expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
-//         } 
-//     else {
-//         isCalc = false;
-//         getResult[0].textContent = "";        
-//         expressionArrItem = ""
-//         expressionArr = [];
-//         if(button.innerText == "."){
-//             printDot();
-//         } else if(button.innerText == "0") {
-//             printZero();
-//         }else {
-//             expressionArrItem = button.innerText;
-//             expressionStr = button.innerText;       
-//             lastChar = expressionArrItem[expressionArrItem.length - 1];
-//         }
-//         checkCurrentData()
-//         expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;     
-//     }
-// }
 function printNum(button) {
     if(button.innerText == "."){
         printDot();
@@ -226,58 +195,63 @@ function printOperator(button) {
         if(!isCalc){
             expressionArr.push(expressionArrItem);
         }  
-        if(button.id === "div"){
-            expressionArr.push("/");
-            lastChar = "/";
-            expressionStr += String.fromCharCode(247);
-            getExpression[0].textContent = expressionStr; 
-        } else if(button.id === "multi"){
-            expressionArr.push("*");
-            lastChar = "*";
-            expressionStr += String.fromCharCode(215); 
-            getExpression[0].textContent = expressionStr;
-        } else {
-            expressionArr.push(button.innerHTML);
-            lastChar = button.innerHTML;
-            expressionStr += button.innerHTML;
-            getExpression[0].textContent = expressionStr;
-        }
+        pushOpInArr(button);
+        getExpression[0].textContent = expressionStr;        
         isCalc = false;
-        expressionArrItem = ""
+        expressionArrItem = "";
         checkCurrentData()
     } else if(/([-+/*\/])/g.test(lastChar)){
-        if(button.id === "div"){
-            expressionArr.pop();
-            expressionArr.push("/");
-            lastChar = "/";
-            expressionStr = expressionStr.substring(0, expressionStr.length - 1);
-            expressionStr += String.fromCharCode(247); 
-            getExpression[0].textContent = expressionStr;            
-        } else if(button.id === "multi"){
-            expressionArr.pop();
-            expressionArr.push("*");
-            lastChar = "*";
-            expressionStr = expressionStr.substring(0, expressionStr.length - 1);            
-            expressionStr += String.fromCharCode(215); 
-            getExpression[0].textContent = expressionStr;
-        } else {
-            expressionArr.pop();
-            expressionArr.push(button.innerHTML);
-            lastChar = button.innerHTML;
-            expressionStr = expressionStr.substring(0, expressionStr.length - 1);                        
-            expressionStr += button.innerHTML;
-            getExpression[0].textContent = expressionStr;
-        }
+        expressionArr.pop();        
+        replaceOpInArr(button);
+        getExpression[0].textContent = expressionStr;                    
         checkCurrentData()
     }
 }
 
+function pushOpInArr(button) {
+    if(button.id === "div"){
+        expressionArr.push("/");
+        lastChar = "/";
+        expressionStr += String.fromCharCode(247);
+    } else if(button.id === "multi"){
+        expressionArr.push("*");
+        lastChar = "*";
+        expressionStr += String.fromCharCode(215); 
+    } else {
+        expressionArr.push(button.innerHTML);
+        lastChar = button.innerHTML;
+        expressionStr += button.innerHTML;
+    }
+}
+
+function replaceOpInArr(button) {
+    if(button.id === "div"){
+        expressionArr.push("/");
+        lastChar = "/";
+        replaceLastChar(expressionStr, String.fromCharCode(247));
+    } else if(button.id === "multi"){
+        expressionArr.push("*");
+        lastChar = "*";
+        replaceLastChar(expressionStr, String.fromCharCode(215));            
+    } else {
+        expressionArr.push(button.innerHTML);
+        lastChar = button.innerHTML;
+        replaceLastChar(expressionStr, button.innerHTML);                        
+    }
+}
+
+function replaceLastChar(str, replaceTo){
+    str = str.substring(0, str.length - 1);
+    str += replaceTo;
+    expressionStr = str;
+}
 // handle calc results
 function printResults(equalButton) {
     if(lastChar != "" && /[0-9]/.test(lastChar)){
         expressionArr.push(expressionArrItem);
         expressionArrItem = ""
         calcResults(expressionArr);
+        checkCurrentData()        
     }
 }
 
