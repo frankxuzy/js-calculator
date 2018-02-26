@@ -2,7 +2,8 @@
 
 feature waiting list:
 - protect all parameters
-- when click op after an op, change it to the current one.
+- bug unsolved decimal calculations 0.2 + 0.1 = 0.30000000000000004
+
 
 ### 20 Feb
 - Build html page.

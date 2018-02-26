@@ -10,9 +10,7 @@ button {
     height: 80px;
 }
 
-#equal{
-    width: 164px;
-}
+
 input {
     height: 40px;
     width: 300px;
@@ -44,3 +42,11 @@ hr {
     top: 0px;
     margin: 10px auto;
     } 
+
+.row {
+    margin-bottom: 4px;
+}
+
+#equal{
+    width: 164px;
+}

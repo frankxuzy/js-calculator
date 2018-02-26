@@ -96,7 +96,7 @@ function handleNegative(){
             getExpression[0].textContent = expressionStr;    
             console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
             
-        } else if(expressionArr[expressionArr.length - 1].toString().indexOf("-") === 0){
+        } else if(lastChar !== "" && expressionArr[expressionArr.length - 1].toString().indexOf("-") === 0){
             expressionArrItem = expressionArr[expressionArr.length - 1].toString().substring(1);
             lastChar = expressionArrItem[expressionArrItem.length - 1].toString();        
             expressionArr = [];
