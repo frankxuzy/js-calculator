@@ -46,6 +46,7 @@ getNegative.addEventListener("click", handleNegative.bind(this, getNegative));
 //     val.addEventListener("keypress", printKey.bind(this, val));
 // });
 document.addEventListener("keypress", function(event){
+    console.log(event.keyCode);
     if(/46|4[8-9]|5[0-7]/g.test(event.keyCode)){
         console.log(event.keyCode);
         Array.from(getNum).forEach(function(val){
@@ -121,9 +122,18 @@ function handleAC() {
 // handle CE
 function handleCE() {
     if(/[0-9.]/g.test(lastChar)){
-        expressionStr = expressionStr.substring(0, expressionStr.lastIndexOf(expressionArrItem));
-        expressionArrItem = "";
-        lastChar = expressionArrItem[expressionArrItem.length - 1];
+        if(expressionArrItem !== ""){
+            expressionStr = expressionStr.substring(0, expressionStr.lastIndexOf(expressionArrItem));
+            expressionArrItem = "";
+            lastChar = expressionStr[expressionStr.length - 1];
+        } else {
+            expressionStr = "";
+            expressionArr = [];
+            lastChar = "";
+            getResult[0].textContent = "";
+            
+        }
+        console.log(expressionArrItem, expressionStr, lastChar, expressionArr);        
         expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
     }
 }

@@ -59,3 +59,4 @@ It works! But code is ugly! need refactor.
 - Add minus button in html
 - Add negative calc function 
 - Add function. When click operator after an operator, change to the current one.
+- fix a bug when handle CE 
