@@ -6,6 +6,7 @@ var expressionArrItem = "";
 var expressionArr = [];
 // check if calculate or not
 var isCalc = false;
+
 var getNum = document.getElementsByClassName("num");
 var getOperator = document.getElementsByClassName("operator");
 var getEqual = document.getElementById("equal");
@@ -15,7 +16,7 @@ var getAC = document.getElementById("ac");
 var getCE = document.getElementById("ce");
 var getNegative = document.getElementById("negative");
 
-
+function calc_init() {
 // Num event listener
 // from function covert array-like obj to array.
 Array.from(getNum).forEach(function(val){
@@ -39,33 +40,39 @@ getCE.addEventListener("click", handleCE.bind(this, getCE));
 // minus button event listener
 getNegative.addEventListener("click", handleNegative.bind(this, getNegative));
 
-// num key press event listener
-// Array.from(getNum).forEach(function(val){
-//     val.addEventListener("keypress", printKey.bind(this, val));
-// });
-document.addEventListener("keypress", function(event){
-    console.log(event.keyCode);
-    if(/46|4[8-9]|5[0-7]/g.test(event.keyCode)){
+keypressEventListener()
+}
+
+//key press event listener
+function checkCurrentData() {
+    console.log(expressionStr, expressionArrItem, lastChar, expressionArr, isCalc);    
+}
+function keypressEventListener(){
+    document.addEventListener("keypress", function(event){
         console.log(event.keyCode);
-        Array.from(getNum).forEach(function(val){
-            if(val.innerText === String.fromCharCode(event.keyCode)){
-                printNum(val);
-            }
-        });
-    } else if(/42|43|45|47/g.test(event.keyCode)) {
-        Array.from(getOperator).forEach(function(val){
-            if(val.innerText === String.fromCharCode(event.keyCode)){
-                printOperator(val);
-            } else if(event.keyCode == 42) {
-                printOperator(document.getElementById("multi"));
-            } else if(event.keyCode == 47) {
-                printOperator(document.getElementById("div"));
-            }
-        });
-    } else if(event.keyCode == 13 || event.keyCode == 61) {
-        printResults(getEqual);
-    }
-});
+        if(/46|4[8-9]|5[0-7]/g.test(event.keyCode)){
+            console.log(event.keyCode);
+            Array.from(getNum).forEach(function(val){
+                if(val.innerText === String.fromCharCode(event.keyCode)){
+                    printNum(val);
+                }
+            });
+        } else if(/42|43|45|47/g.test(event.keyCode)) {
+            Array.from(getOperator).forEach(function(val){
+                if(val.innerText === String.fromCharCode(event.keyCode)){
+                    printOperator(val);
+                } else if(event.keyCode == 42) {
+                    printOperator(document.getElementById("multi"));
+                } else if(event.keyCode == 47) {
+                    printOperator(document.getElementById("div"));
+                }
+            });
+        } else if(event.keyCode == 13 || event.keyCode == 61) {
+            printResults(getEqual);
+        }
+    });
+}
+
 
 function handleNegative(){
     if(!isCalc){
@@ -74,13 +81,13 @@ function handleNegative(){
             expressionStr += ("(-" + expressionArrItem + ")");
             expressionArrItem = "-" + expressionArrItem;
             lastChar = expressionArrItem[expressionArrItem.length - 1];
-            console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+            checkCurrentData();
             getExpression[0].textContent = expressionStr;        
         } else if(expressionArrItem.indexOf("-") === 0){
             expressionStr = expressionStr.substring(0, (expressionStr.lastIndexOf(expressionArrItem) - 1));
             expressionArrItem = expressionArrItem.substring(1);
             lastChar = expressionArrItem[expressionArrItem.length - 1];        
-            console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+            checkCurrentData();
             expressionStr += expressionArrItem;
             getExpression[0].textContent = expressionStr;   
         }
@@ -92,7 +99,7 @@ function handleNegative(){
             expressionArr = [];
             expressionArr.push(expressionArrItem);
             getExpression[0].textContent = expressionStr;    
-            console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+            checkCurrentData()
             
         } else if(lastChar !== "" && expressionArr[expressionArr.length - 1].toString().indexOf("-") === 0){
             expressionArrItem = expressionArr[expressionArr.length - 1].toString().substring(1);
@@ -101,7 +108,7 @@ function handleNegative(){
             expressionArr.push(expressionArrItem);
             expressionStr = expressionArrItem;
             getExpression[0].textContent = expressionStr;
-            console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+            checkCurrentData()
         }
     }
 
@@ -115,6 +122,7 @@ function handleAC() {
     lastChar = "";
     expressionArr = [];
     expressionArrItem = "";
+    isCalc = false;
 } 
 
 // handle CE
@@ -131,56 +139,77 @@ function handleCE() {
             getResult[0].textContent = "";
             
         }
-        console.log(expressionArrItem, expressionStr, lastChar, expressionArr);        
+        checkCurrentData()  
         expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
     }
 }
 
 // handle numbers
+// function printNum(button) {
+//     if(!isCalc){
+//         //check is "."
+//         if(button.innerText == "."){
+//             printDot();
+//         } else if(button.innerText == "0"){
+//             printZero();
+//         } else {
+//             expressionArrItem += button.innerText;
+//             expressionStr += button.innerText;
+//             lastChar = expressionArrItem[expressionArrItem.length - 1];
+//         }
+//         checkCurrentData()        
+//         expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
+//         } 
+//     else {
+//         isCalc = false;
+//         getResult[0].textContent = "";        
+//         expressionArrItem = ""
+//         expressionArr = [];
+//         if(button.innerText == "."){
+//             printDot();
+//         } else if(button.innerText == "0") {
+//             printZero();
+//         }else {
+//             expressionArrItem = button.innerText;
+//             expressionStr = button.innerText;       
+//             lastChar = expressionArrItem[expressionArrItem.length - 1];
+//         }
+//         checkCurrentData()
+//         expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;     
+//     }
+// }
 function printNum(button) {
-    if(!isCalc){
-        //check is "."
-        if(button.innerText == "."){
-            isDot();
-        } else if(button.innerText == "0"){
-            isZero();
-        } else {
-            expressionArrItem += button.innerText;
-            expressionStr += button.innerText;
-            lastChar = expressionArrItem[expressionArrItem.length - 1];
-        }
-        expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
-        console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
-        } 
-    else {
-        isCalc = false;
+    if(button.innerText == "."){
+        printDot();
+    } else if(button.innerText == "0"){
+        printZero();
+    } else if(isCalc === false){
+        expressionArrItem += button.innerText.toString();
+        expressionStr += button.innerText.toString();
+        lastChar = expressionArrItem[expressionArrItem.length - 1];
+    } else if(isCalc === true) {
         getResult[0].textContent = "";        
+        expressionArrItem = ""
         expressionArr = [];
-        if(button.innerText == "."){
-            isDot(expressionArrItem);
-        } else if(button.innerText == "0") {
-            isZero(expressionArrItem);
-        }else {
-            expressionArrItem = button.innerText;
-            lastChar = expressionArrItem[expressionArrItem.length - 1];
-        }
-        console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
-        expressionStr = expressionArrItem;
-        expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;        
-        
+        expressionArrItem = button.innerText.toString();
+        expressionStr = button.innerText.toString();
+        lastChar = expressionArrItem[expressionArrItem.length - 1];
+        isCalc = false;
+    }
+    checkCurrentData()    
+    expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;            
+}
+
+function printZero() {
+    //there is dot or there are 1-9 before
+    if(expressionArrItem.lastIndexOf(".") !== -1 || /[1-9]/g.test(expressionArrItem)){
+        expressionArrItem += 0;
+        expressionStr += 0;
+        lastChar = expressionArrItem[expressionArrItem.length - 1]; 
     }
 }
 
-function isZero() {
-        //there is dot or there are 1-9 before
-        if(expressionArrItem.lastIndexOf(".") !== -1 || /[1-9]/g.test(expressionArrItem)){
-            expressionArrItem += 0;
-            expressionStr += 0;
-            lastChar = expressionArrItem[expressionArrItem.length - 1]; 
-        }
-    }
-
-function isDot(){
+function printDot(){
     if(expressionArrItem === ""){
         expressionArrItem += "0.";
         expressionStr += "0."
@@ -215,7 +244,7 @@ function printOperator(button) {
         }
         isCalc = false;
         expressionArrItem = ""
-        console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+        checkCurrentData()
     } else if(/([-+/*\/])/g.test(lastChar)){
         if(button.id === "div"){
             expressionArr.pop();
@@ -239,6 +268,7 @@ function printOperator(button) {
             expressionStr += button.innerHTML;
             getExpression[0].textContent = expressionStr;
         }
+        checkCurrentData()
     }
 }
 
@@ -273,14 +303,12 @@ function calcResults(arr) {
             subExpression = arr.splice(operatorIdx - 1, 3).join("");
             subExpressionResults = eval(subExpression);
             arr.splice(operatorIdx - 1, 0, subExpressionResults);
-            console.log(arr);
         } else {
             subExpression = arr.splice(0, 3).join("");
             subExpressionResults = eval(subExpression);
             arr.splice(0, 0, subExpressionResults);
         }
     }
-    console.log(arr[0]);
     //Print result into outputResult div
     getResult[0].textContent = arr[0];
     //Print expression into outputExpression div
@@ -289,7 +317,7 @@ function calcResults(arr) {
     expressionStr = arr[0];    
     expressionArr = [];
     expressionArr.push(arr[0]);
-    expressionArrItem = "";
+    expressionArrItem = arr[0];
     isCalc = true;
 }
 
@@ -305,6 +333,8 @@ function highPriorityOperatorIndex(arr, opera1, opera2){
         return -1;
     }
 }
+
+calc_init()
 
 // recursion demo
 // var stripeArr = function(val) {

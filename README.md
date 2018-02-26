@@ -58,7 +58,22 @@ It works! But code is ugly! need refactor.
 ### 26 Feb
 - Add CE function
 - Add keyboard num and operators input function
-- Add minus button in html
+- Add negative button in html
 - Add negative calc function 
 - Add function. When click operator after an operator, change to the current one.
 - fix a bug when handle CE 
+
+### 27 Feb 
+Code refactor.
+Review all features.
+#### I want:
+- Click buttons save the input and print num or operator on page.
+- Press num or operator button save the input and print them on page.
+- Click AC to reset the calculator.
+- Click CE to delete the current number.
+- Click equal, do the calc and give the result.
+- Click negative button to toggle negative symbol
+- Click operator, if the last input is operator, change it to the current one.
+- Click dot, if no former input or former input is operator, print 0. and save data, else if former input is integer. print . and save data.
+- Click 0, if former input is num 1-9 or . print 0 and save data.
+- After click equal, when click num, reset the calc and save this num then print on page.
