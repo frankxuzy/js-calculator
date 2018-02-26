@@ -64,6 +64,8 @@ It works! But code is ugly! need refactor.
 - fix a bug when handle CE 
 
 ### 27 Feb 
+- refactor printNum function
+
 Code refactor.
 Review all features.
 #### I want:
@@ -77,3 +79,5 @@ Review all features.
 - Click dot, if no former input or former input is operator, print 0. and save data, else if former input is integer. print . and save data.
 - Click 0, if former input is num 1-9 or . print 0 and save data.
 - After click equal, when click num, reset the calc and save this num then print on page.
+
+
