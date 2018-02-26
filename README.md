@@ -2,8 +2,7 @@
 
 feature waiting list:
 - protect all parameters
-- add keyboard num input
-- add negtive num calc
+- when click op after an op, change it to the current one.
 
 ### 20 Feb
 - Build html page.
@@ -59,3 +58,4 @@ It works! But code is ugly! need refactor.
 - Add keyboard num and operators input function
 - Add minus button in html
 - Add negative calc function 
+- Add function. When click operator after an operator, change to the current one.

@@ -96,11 +96,11 @@ function handleNegative(){
             console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
             
         } else if(expressionArr[expressionArr.length - 1].toString().indexOf("-") === 0){
-            expressionArrItem = expressionArr[expressionArr.length - 1].substring(1);
-            lastChar = expressionArrItem[expressionArrItem.length - 1];        
+            expressionArrItem = expressionArr[expressionArr.length - 1].toString().substring(1);
+            lastChar = expressionArrItem[expressionArrItem.length - 1].toString();        
             expressionArr = [];
             expressionArr.push(expressionArrItem);
-            expressionStr = ("(-" + expressionArrItem + ")");
+            expressionStr = expressionArrItem;
             getExpression[0].textContent = expressionStr;
             console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
         }
@@ -208,6 +208,29 @@ function printOperator(button) {
         isCalc = false;
         expressionArrItem = ""
         console.log(expressionArrItem, expressionStr, lastChar, expressionArr);
+    } else if(/([-+/*\/])/g.test(lastChar)){
+        if(button.id === "div"){
+            expressionArr.pop();
+            expressionArr.push("/");
+            lastChar = "/";
+            expressionStr = expressionStr.substring(0, expressionStr.length - 1);
+            expressionStr += String.fromCharCode(247); 
+            getExpression[0].textContent = expressionStr;            
+        } else if(button.id === "multi"){
+            expressionArr.pop();
+            expressionArr.push("*");
+            lastChar = "*";
+            expressionStr = expressionStr.substring(0, expressionStr.length - 1);            
+            expressionStr += String.fromCharCode(215); 
+            getExpression[0].textContent = expressionStr;
+        } else {
+            expressionArr.pop();
+            expressionArr.push(button.innerHTML);
+            lastChar = button.innerHTML;
+            expressionStr = expressionStr.substring(0, expressionStr.length - 1);                        
+            expressionStr += button.innerHTML;
+            getExpression[0].textContent = expressionStr;
+        }
     }
 }
 
