@@ -1,9 +1,7 @@
 # js-calculator
 
 Todo list:
-- code refactor
-- After click CE, cannot change operator.
-- bug unsolved decimal calculations 0.2 + 0.1 = 0.30000000000000004
+- bug unsolved decimal calculations 0.2 + 0.1 = 0.30000000000000004. caused by eval() function.
 
 
 ### 20 Feb
