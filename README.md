@@ -67,6 +67,7 @@ It works! But code is ugly! need refactor.
 - refactor printNum function.
 - refactor printOperator function.
 - Add checkCurrentData function.
+- Convert expressionArrItem to string, num cannot substring
 
 
 Code refactor.
