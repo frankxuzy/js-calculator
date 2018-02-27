@@ -22,33 +22,27 @@ function calc_init() {
     Array.from(getNum).forEach(function(val){
         val.addEventListener("click", printNum.bind(this, val));
     });
-
     // Operator event listener
     Array.from(getOperator).forEach(function(val){
         val.addEventListener("click", printOperator.bind(this, val));
     });
-
     // equal button event listener
     getEqual.addEventListener("click", printResults.bind(this, getEqual));
-
     // AC button event listener
     getAC.addEventListener("click", handleAC.bind(this, getAC));
-
     // CE button event listener
     getCE.addEventListener("click", handleCE.bind(this, getCE));
-
     // minus button event listener
     getNegative.addEventListener("click", handleNegative.bind(this, getNegative));
-
     keypressEventListener()
 }
 
-//key press event listener
 function checkCurrentData() {
     console.log("expressionStr", "expressionArrItem", "lastChar", "expressionArr", "isCalc");    
     console.log(expressionStr, expressionArrItem, lastChar, expressionArr, isCalc);    
 }
 
+//key press event listener
 function keypressEventListener(){
     document.addEventListener("keypress", function(event){
         console.log(event.keyCode);
@@ -79,6 +73,7 @@ function keypressEventListener(){
 function handleNegative(){
     if(!isCalc){
         if(/[0-9]/g.test(lastChar) && expressionArrItem.indexOf("-") !== 0){
+            //remove the previous num input
             expressionStr = expressionStr.substring(0, expressionStr.lastIndexOf(expressionArrItem));
             expressionStr += ("(-" + expressionArrItem + ")");
             expressionArrItem = "-" + expressionArrItem;
@@ -169,6 +164,79 @@ function printNum(button) {
     expressionStr === "" ? getExpression[0].textContent = 0 : getExpression[0].textContent = expressionStr;            
 }
 
+// handle operator
+function printOperator(button) {
+    if(lastChar != ""&& /[0-9]/g.test(lastChar)){
+        if(!isCalc){
+            expressionArr.push(expressionArrItem);
+        }  
+        pushOpInArr(button);
+        getExpression[0].textContent = expressionStr;        
+        isCalc = false;
+        expressionArrItem = "";
+        checkCurrentData()
+    } else if(/([-+/*\/])/g.test(lastChar)){
+        expressionArr.pop();        
+        replaceOpInArr(button);
+        getExpression[0].textContent = expressionStr;                    
+        checkCurrentData()
+    }
+}
+
+// handle calc results
+function printResults(equalButton) {
+    if(lastChar != "" && /[0-9]/.test(lastChar)){
+        expressionArr.push(expressionArrItem);
+        expressionArrItem = ""
+        calcResults(expressionArr);
+        checkCurrentData()        
+    }
+}
+
+// handle calcs
+function calcResults(arr) {
+    while(arr.length > 2) {
+        var operatorIdx = highPriorityOperatorIndex(arr, "*", "/");
+        var subExpression =[];
+        var subExpressionResults;
+        if(operatorIdx !== -1){
+            // array.slice selected from begin to end (end not included).
+            subExpression = arr.splice(operatorIdx - 1, 3).join("");
+            subExpressionResults = eval(subExpression);
+            arr.splice(operatorIdx - 1, 0, subExpressionResults);
+        } else {
+            subExpression = arr.splice(0, 3).join("");
+            subExpressionResults = eval(subExpression);
+            arr.splice(0, 0, subExpressionResults);
+        }
+    }
+    //Print result into outputResult div
+    getResult[0].textContent = arr[0];
+    //Print expression into outputExpression div
+    getExpression[0].textContent = expressionStr + '=' + arr[0];
+    //refresh the expressionStr value to current result.
+    expressionStr = arr[0];    
+    expressionArr = [];
+    expressionArr.push(arr[0]);
+    expressionArrItem = arr[0].toString();
+    lastChar = expressionArrItem[expressionArrItem.length - 1];
+    isCalc = true;
+}
+
+// find the operator with high priority 
+function highPriorityOperatorIndex(arr, opera1, opera2){
+    if(arr.indexOf(opera1) !== -1 && arr.indexOf(opera2) !== -1){
+        return Math.min(arr.indexOf(opera1), arr.indexOf(opera2));
+    } else if(arr.indexOf(opera1) !== -1) {
+        return arr.indexOf(opera1);
+    } else if(arr.indexOf(opera2) !== -1) {
+        return arr.indexOf(opera2);
+    } else {
+        return -1;
+    }
+}
+
+
 function printZero() {
     //there is dot or there are 1-9 before
     if(expressionArrItem.lastIndexOf(".") !== -1 || /[1-9]/g.test(expressionArrItem)){
@@ -187,25 +255,6 @@ function printDot(){
         expressionStr += "."
     }
     lastChar = expressionArrItem[expressionArrItem.length - 1];
-}
-
-// handle operator
-function printOperator(button) {
-    if(lastChar != ""&& /[0-9]/g.test(lastChar)){
-        if(!isCalc){
-            expressionArr.push(expressionArrItem);
-        }  
-        pushOpInArr(button);
-        getExpression[0].textContent = expressionStr;        
-        isCalc = false;
-        expressionArrItem = "";
-        checkCurrentData()
-    } else if(/([-+/*\/])/g.test(lastChar)){
-        expressionArr.pop();        
-        replaceOpInArr(button);
-        getExpression[0].textContent = expressionStr;                    
-        checkCurrentData()
-    }
 }
 
 function pushOpInArr(button) {
@@ -245,120 +294,5 @@ function replaceLastChar(str, replaceTo){
     str += replaceTo;
     expressionStr = str;
 }
-// handle calc results
-function printResults(equalButton) {
-    if(lastChar != "" && /[0-9]/.test(lastChar)){
-        expressionArr.push(expressionArrItem);
-        expressionArrItem = ""
-        calcResults(expressionArr);
-        checkCurrentData()        
-    }
-}
 
-// handle calcs
-// bug found if use below regex 1+1*1*1*1*1 will become [1, +, 1*1, *, 1*1, *, 1]
-//  var expArr = expression.replace(/([0-9])([-+/*\/])([0-9])/g, '$1 $2 $3').split(' ');
-// one solution is scan twice first seperate 1* to 1 * then seperate *1 to * 1.
-    // var expArr = expression.replace(/([0-9])([-+/*\/])/g, '$1 $2');
-    // expArr = expArr.replace(/([-+/*\/])([0-9])/g, '$1 $2').split(' ');
-    // console.log(expArr);
-
-    // find the index of high priority operator then calc with index-1 and index+1 then splice into the array
-
-    // expArr.indexOf("/*|\//g")
-
-function calcResults(arr) {
-    while(arr.length > 2) {
-        var operatorIdx = highPriorityOperatorIndex(arr, "*", "/");
-        var subExpression =[];
-        var subExpressionResults;
-        if(operatorIdx !== -1){
-            // array.slice selected from begin to end (end not included).
-            subExpression = arr.splice(operatorIdx - 1, 3).join("");
-            subExpressionResults = eval(subExpression);
-            arr.splice(operatorIdx - 1, 0, subExpressionResults);
-        } else {
-            subExpression = arr.splice(0, 3).join("");
-            subExpressionResults = eval(subExpression);
-            arr.splice(0, 0, subExpressionResults);
-        }
-    }
-    //Print result into outputResult div
-    getResult[0].textContent = arr[0];
-    //Print expression into outputExpression div
-    getExpression[0].textContent = expressionStr + '=' + arr[0];
-    //refresh the expressionStr value to current result.
-    expressionStr = arr[0];    
-    expressionArr = [];
-    expressionArr.push(arr[0]);
-    expressionArrItem = arr[0];
-    isCalc = true;
-}
-
-// find the operator with high priority 
-function highPriorityOperatorIndex(arr, opera1, opera2){
-    if(arr.indexOf(opera1) !== -1 && arr.indexOf(opera2) !== -1){
-        return Math.min(arr.indexOf(opera1), arr.indexOf(opera2));
-    } else if(arr.indexOf(opera1) !== -1) {
-        return arr.indexOf(opera1);
-    } else if(arr.indexOf(opera2) !== -1) {
-        return arr.indexOf(opera2);
-    } else {
-        return -1;
-    }
-}
-
-calc_init()
-
-// recursion demo
-// var stripeArr = function(val) {
-//     if(!Array.isArray(val)){
-//       newArr.push(val);
-//     } else{
-//       for(var i in val){
-//         stripeArr(val[i]);
-//       }
-//     }   
-//   };
-
-// Array.from(getButton).forEach(clickButton);
-
-// getSeven.addEventListener("click", printButtonValue(getSeven), false);
-// add eventlistener to all the num button
-// Array.from(getNum).forEach(function(val){
-//     val.addEventListener("click", printButtonValue);
-// });
-
-// add eventlistener to all the num button
-// Array.from(getOperator).forEach(function(val){
-//     val.addEventListener("click", printButtonValue);
-// });
-
-// function clickButton(button) {
-//     button.addEventListener("click", function(val) {
-//         console.log(val.innerText);
-//     });
-// }
-
-// map(function(val){
-//     addEventListener("click", printHello);
-// });
-// getOperator.addEventListener("click", printHello);
-
-// function printHello() {
-//     console.log("hello");
-// }
-
-
-
-// function printButtonValue() {
-//     printEquation = 
-//     getTextBox.value = "test";
-// }
-// document.getElementById("seven").innerText
-// document.getElementsByTagName("button");
-
-// handle zero
-// if(lastChar == "." || /[0-9]/){
-        
-// }
+calc_init();
